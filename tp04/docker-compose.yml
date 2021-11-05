@@ -1,0 +1,21 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  rabbit:
+      hostname: rabbit
+      image: rabbitmq:latest
+      environment:
+          - RABBITMQ_DEFAULT_USER=admin
+          - RABBITMQ_DEFAULT_PASS=12345
+      ports:
+          - "5672:5672"
+
+  celery:
+      hostname: celery
+      image: python:latest
+      command: tail -F /dev/null
+      volumes:
+          - ./app:/app
+      links:
+          - rabbit
+      depends_on:
+          - rabbit
